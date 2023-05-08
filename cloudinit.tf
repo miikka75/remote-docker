@@ -29,25 +29,25 @@ data "cloudinit_config" "_" {
       ${yamlencode(local.packages)}
       users:
       - default
-      - name: docker
-        primary_group: docker
+      - name: ${var.user}
+        primary_group: ${var.user}
         groups: docker
-        home: /home/docker
+        home: /home/${var.user}
         shell: /bin/bash
         sudo: ALL=(ALL) NOPASSWD:ALL
         ssh_authorized_keys:
         - ${tls_private_key.ssh.public_key_openssh}
         - ${join("\n", local.authorized_keys)}
       write_files:
-      - path: /home/docker/.ssh/id_rsa
+      - path: /home/${var.user}/.ssh/id_rsa
         defer: true
-        owner: "docker:docker"
+        owner: "${var.user}:${var.user}"
         permissions: "0600"
         content: |
           ${indent(4, tls_private_key.ssh.private_key_pem)}
-      - path: /home/docker/.ssh/id_rsa.pub
+      - path: /home/${var.user}/.ssh/id_rsa.pub
         defer: true
-        owner: "docker:docker"
+        owner: "${var.user}:${var.user}"
         permissions: "0600"
         content: |
           ${indent(4, tls_private_key.ssh.public_key_openssh)}
@@ -61,7 +61,7 @@ data "cloudinit_config" "_" {
       #!/bin/sh
       sed -i "s/-A INPUT -j REJECT --reject-with icmp-host-prohibited//" /etc/iptables/rules.v4
       netfilter-persistent start
-      chown docker:docker /home/docker/.ssh/authorized_keys
+      chown ${var.user}:${var.user} /home/${var.user}/.ssh/authorized_keys
     EOF
   }
 }

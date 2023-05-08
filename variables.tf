@@ -3,6 +3,11 @@ variable "name" {
   default = "docker-remote"
 }
 
+variable "user" {
+  type = string
+  default = "ubuntu"
+}
+
 /*
 Available flex shapes:
 "VM.Optimized3.Flex"  # Intel Ice Lake
@@ -10,11 +15,14 @@ Available flex shapes:
 "VM.Standard.A1.Flex" # Ampere Altra
 "VM.Standard.E3.Flex" # AMD Rome
 "VM.Standard.E4.Flex" # AMD Milan
+Always Free Resources:
+All tenancies get up to two Always Free VM instances using the VM.Standard.E2.1.Micro shape, which has an AMD processor. (1 Gb memory)
+All tenancies get the first 3,000 OCPU hours and 18,000 GB hours per month for free for VM instances using the VM.Standard.A1.Flex shape, which has an Arm processor. For Always Free tenancies, this is equivalent to 4 OCPUs and 24 GB of memory.
 */
 
 variable "shape" {
   type    = string
-  default = "VM.Standard.E4.Flex"
+  default = "VM.Standard.A1.Flex"
 }
 
 variable "how_many_nodes" {
@@ -29,10 +37,10 @@ variable "availability_domain" {
 
 variable "ocpus_per_node" {
   type    = number
-  default = 2
+  default = 1
 }
 
 variable "memory_in_gbs_per_node" {
   type    = number
-  default = 16
+  default = 6
 }
