@@ -3,7 +3,10 @@ locals {
     "apt-transport-https",
     "build-essential",
     "ca-certificates",
+    "containerd.io",
     "curl",
+    "ddclient",
+    "docker-ce",
     "jq",
     "lsb-release",
     "make",
@@ -27,6 +30,12 @@ data "cloudinit_config" "_" {
       package_upgrade: false
       packages:
       ${yamlencode(local.packages)}
+      apt:
+        sources:
+          docker.list:
+            source: "deb https://download.docker.com/linux/ubuntu jammy stable"
+            key: |
+              ${indent(8, data.http.docker_repo_key.response_body)}
       users:
       - default
       - name: ${var.user}
@@ -51,6 +60,10 @@ data "cloudinit_config" "_" {
         permissions: "0600"
         content: |
           ${indent(4, tls_private_key.ssh.public_key_openssh)}
+      - path: /etc/ddclient.conf
+        owner: "${var.user}:${var.user}"
+        permissions: "0600"
+        content: "${data.template_file.ddclient.rendered}"
       EOF
   }
 
@@ -66,6 +79,15 @@ data "cloudinit_config" "_" {
   }
 }
 
-data "http" "apt_repo_key" {
-  url = "https://packages.cloud.google.com/apt/doc/apt-key.gpg.asc"
+data "template_file" "ddclient" {
+    template = "${file("${path.module}/ddclient.conf.tpl")}"
+    vars = {
+      dyfi_username = var.dyfi_username
+      dyfi_password = var.dyfi_password
+      dyfi_hostname = var.dyfi_hostname
+    }
+}
+
+data "http" "docker_repo_key" {
+  url = "https://download.docker.com/linux/debian/gpg"
 }

@@ -8,6 +8,22 @@ variable "user" {
   default = "ubuntu"
 }
 
+# dy.fi DDNS service
+variable "dyfi_username" {
+  type = string
+  default = "user@mail.com"
+}
+
+variable "dyfi_password" {
+  type = string
+  default = "password"
+}
+
+variable "dyfi_hostname" {
+  type = string
+  default = "mydomain.dy.fi"
+}
+
 /*
 Available flex shapes:
 "VM.Optimized3.Flex"  # Intel Ice Lake
