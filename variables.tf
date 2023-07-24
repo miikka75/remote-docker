@@ -36,6 +36,16 @@ All tenancies get up to two Always Free VM instances using the VM.Standard.E2.1.
 All tenancies get the first 3,000 OCPU hours and 18,000 GB hours per month for free for VM instances using the VM.Standard.A1.Flex shape, which has an Arm processor. For Always Free tenancies, this is equivalent to 4 OCPUs and 24 GB of memory.
 */
 
+variable "available_ocpus" {
+  type    = number
+  default = 4
+}
+
+variable "available_mem" {
+  type    = number
+  default = 24
+}
+
 variable "shape" {
   type    = string
   default = "VM.Standard.A1.Flex"
@@ -49,14 +59,4 @@ variable "how_many_nodes" {
 variable "availability_domain" {
   type    = number
   default = 0
-}
-
-variable "ocpus_per_node" {
-  type    = number
-  default = 1
-}
-
-variable "memory_in_gbs_per_node" {
-  type    = number
-  default = 6
 }

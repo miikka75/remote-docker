@@ -23,8 +23,8 @@ resource "oci_core_instance" "_" {
   compartment_id      = local.compartment_id
   shape               = var.shape
   shape_config {
-    memory_in_gbs = var.memory_in_gbs_per_node
-    ocpus         = var.ocpus_per_node
+    memory_in_gbs = var.available_mem / var.how_many_nodes
+    ocpus         = var.available_ocpus / var.how_many_nodes
   }
   source_details {
     source_id   = data.oci_core_images._.images[0].id
