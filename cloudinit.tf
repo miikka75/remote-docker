@@ -72,7 +72,7 @@ data "cloudinit_config" "_" {
     content_type = "text/x-shellscript"
     content      = <<-EOF
       #!/bin/sh
-      sed -i "s/-A INPUT -j REJECT --reject-with icmp-host-prohibited//" /etc/iptables/rules.v4
+      sed -i "s/-A INPUT -j REJECT --reject-with icmp-host-prohibited/-A INPUT -p tcp -m multiport -dports ${var.open_ports} -j ACCEPT/" /etc/iptables/rules.v4
       netfilter-persistent start
       chown ${var.user}:${var.user} /home/${var.user}/.ssh/authorized_keys
     EOF

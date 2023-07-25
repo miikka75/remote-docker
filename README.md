@@ -83,6 +83,10 @@ ssh docker-remote1
 docker ps
 ```
 
+## Permit access from internet
+
+Although configuration in `networks.tf` allows access to/from all ports (via ingress and egress rules), Oracle versions of virtual machines disable internet access on most ports with firewall. Ports in firewall must be [opened separately](https://dev.to/armiedema/opening-up-port-80-and-443-for-oracle-cloud-servers-j35). Set `open_ports`variable in `variables.tf` file with ports which need to be exposed. `cloudinit.tf` will create a script with iptables rule to open those ports, which is executed in created virtual machine.
+
 ## Deploying your container
 
 OK, now you want to start running containers there from your local machine, but you also run some containers locally for whatever reason.

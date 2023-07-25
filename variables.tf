@@ -8,6 +8,12 @@ variable "user" {
   default = "ubuntu"
 }
 
+# String of comma separated port numbers to open
+variable "open_ports" {
+  type = string
+  default = "80,443"
+}
+
 # dy.fi DDNS service
 variable "dyfi_username" {
   type = string
